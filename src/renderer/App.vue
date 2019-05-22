@@ -1,15 +1,18 @@
-<template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+<template lang="pug">
+	#app
+		layout
 </template>
 
 <script>
-  export default {
-    name: 'electron-vue-demo'
-  }
+	import DefaultLayout from '@/layouts/DefaultLayout'
+	export default {
+	  name: 'electron-vue-demo',
+	  components: {
+	    layout: DefaultLayout
+	  }
+	}
 </script>
 
-<style>
-  /* CSS */
+<style lang="sass">
+	@import '~@/style/main'
 </style>

@@ -80,10 +80,15 @@ let rendererConfig = {
             loaders: {
               sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1',
               scss: 'vue-style-loader!css-loader!sass-loader',
-              less: 'vue-style-loader!css-loader!less-loader'
+              less: 'vue-style-loader!css-loader!less-loader',
+              pug: 'pug-plain-loader!pug-loader',
             }
           }
         }
+      },
+      {
+        test: /\.pug$/,
+        loader: 'pug-plain-loader'
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
