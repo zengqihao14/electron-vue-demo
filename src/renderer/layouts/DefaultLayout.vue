@@ -1,17 +1,20 @@
 <template lang="pug">
 	.wrapper
 		global-head
+		global-side-menu
 		.main-container
 			router-view
 </template>
 
 <script>
 	import GlobalHead from '@/components/GlobalHead'
+  import GlobalSideMenu from '@/components/GlobalSideMenu'
 
 	export default {
 	  name: 'default-layout',
 	  components: {
-	    GlobalHead
+	    GlobalHead,
+      GlobalSideMenu
 	  }
 	}
 </script>
@@ -21,9 +24,10 @@
 		position: relative
 		padding: 0
 		margin: 0
+		min-height: 100vh
 	.main-container
 		position: relative
-		padding: 32px 0 0
+		padding: 0
 		margin: 0
 </style>
 
