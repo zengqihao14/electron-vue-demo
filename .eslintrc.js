@@ -20,6 +20,7 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
+    'no-tabs': 0,
     // allow async-await
     'generator-star-spacing': 'off',
     // allow debugger during development
@@ -146,7 +147,7 @@ module.exports = {
     'no-inline-comments': 0,
     'no-trailing-spaces': 1,
     'no-lonely-if': 1,
-    'no-mixed-spaces-and-tabs': 2,
+    'no-mixed-spaces-and-tabs': 0,
     'no-multiple-empty-lines': [1, { 'max': 3 }],
     'no-negated-condition': 0,
     'no-nested-ternary': 0,

@@ -23,4 +23,7 @@ new Vue({
   router,
   store,
   template: '<App/>',
+  beforeCreate: function() {
+    this.$db.defaults({ posts: [], user: {}, count: 0 }).write()
+  }
 }).$mount('#app')

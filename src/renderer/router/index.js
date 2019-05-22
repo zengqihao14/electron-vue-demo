@@ -11,10 +11,10 @@ export default new Router({
       component: () => import('@/pages/LandingPage')
     },
     {
-      path: '/subpage',
+      path: '/db-demo',
       icon: 'none',
-      name: 'subpage',
-      component: () => import('@/pages/Subpage')
+      name: 'db-demo',
+      component: () => import('@/pages/DbDemo')
     },
     {
       path: '*',

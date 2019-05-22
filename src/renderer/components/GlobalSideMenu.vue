@@ -6,7 +6,7 @@
 			md-list-item.global-side-menu-item
 				md-button.global-side-menu-button(@click="goTo('/')") Top
 			md-list-item.global-side-menu-item
-				md-button.global-side-menu-button(@click="goTo('/subpage')") Subpage
+				md-button.global-side-menu-button(@click="goTo('/db-demo')") DB DEMO
 </template>
 
 <script>
