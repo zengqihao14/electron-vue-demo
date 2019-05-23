@@ -7,7 +7,8 @@
 			md-card
 		)
 			md-table-toolbar
-				h1.title Users
+				h1.table-title Users
+				user-toolbar(:addUser="addUser")
 			md-table-row(slot="md-table-row" slot-scope="{ item }")
 				md-table-cell(md-label="ID" md-sort-by="id") {{item.id}}
 				md-table-cell(md-label="NAME" md-sort-by="name") {{item.name}}
@@ -21,17 +22,27 @@
 </template>
 
 <script>
+	import UserToolbar from '@/pages/DbDemo/components/UserToolbar'
+
   export default {
     name: 'user-table',
     props: {
       users: Array,
+      addUser: Function,
       deleteUser: Function
     },
+	  components: {
+      UserToolbar
+	  },
 	  methods: {}
   }
 </script>
 
 <style lang="sass">
+	.table-title
+		font-size: 18px
+		font-weight: bold
+		padding: 15px 0 0
 	.table
 		width: 100%
 		padding: 0

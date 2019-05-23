@@ -3,10 +3,10 @@
 		h1.title DB Demo
 		div.button-wrapper
 			md-button.md-raised(@click="getUsers") get users
-			md-button.md-raised(@click="addUser") add user
 			md-button.md-raised(@click="cleanUsers") clean users
 		user-table(
 			:users="users"
+			:addUser="addUser"
 			:deleteUser="deleteUser"
 		)
 </template>
@@ -29,10 +29,13 @@
       getUsers() {
         this.users = this.$root.$db.read().get('users').value()
       },
-      async addUser() {
+      async addUser(data) {
         await this.$root.$db.read()
 	        .get('users')
-	        .push({ id: uuidv1(), name: 'lowdb is awesome' })
+	        .push({
+		        id: uuidv1(),
+		        ...data
+	        })
 	        .write()
         this.getUsers()
       },
