@@ -1,37 +1,57 @@
 <template lang="pug">
 	.transition-container
-		h1.title Db Demo
-		md-button(@click="getPosts") get posts
-		md-button(@click="setPosts") set posts
-		md-button(@click="cleanPosts") clean posts
-		div {{posts}}
+		h1.title DB Demo
+		div.button-wrapper
+			md-button.md-raised(@click="getUsers") get users
+			md-button.md-raised(@click="addUser") add user
+			md-button.md-raised(@click="cleanUsers") clean users
+		user-table(
+			:users="users"
+			:deleteUser="deleteUser"
+		)
 </template>
 
 <script>
+	import uuidv1 from 'uuid/v1'
+	import UserTable from '@/pages/DbDemo/components/UserTable'
+
   export default {
-    name: 'landing-page',
+    name: 'db-demo',
     data() {
       return {
-        posts: []
+        users: []
       }
     },
+	  components: {
+      UserTable
+	  },
     methods: {
-      getPosts() {
-        this.posts = this.$root.$db.read().get('posts').value()
+      getUsers() {
+        this.users = this.$root.$db.read().get('users').value()
       },
-      async setPosts() {
-        const newPosts = [...this.posts, {
-          id: Math.random(),
-          text: 'test'
-        }]
-        await this.$root.$db.read().set('posts', newPosts).write()
-        this.getPosts()
+      async addUser() {
+        await this.$root.$db.read()
+	        .get('users')
+	        .push({ id: uuidv1(), name: 'lowdb is awesome' })
+	        .write()
+        this.getUsers()
       },
-      async cleanPosts() {
-        await this.$root.$db.read().set('posts', []).write()
-	      this.getPosts()
+      async deleteUser(id) {
+        console.log('delete id:', id)
+        await this.$root.$db.read()
+	        .get('users')
+          .remove({ id })
+	        .write()
+        this.getUsers()
+      },
+      async cleanUsers() {
+        await this.$root.$db.read().set('users', []).write()
+	      this.getUsers()
 			}
     },
+	  beforeMount() {
+      this.getUsers()
+    }
   }
 </script>
 
@@ -39,4 +59,7 @@
 	.title
 		font-size: 20px
 		font-weight: bold
+	.button-wrapper
+		display: inline-flex
+		margin: 15px 0 0
 </style>

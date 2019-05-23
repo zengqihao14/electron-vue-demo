@@ -24,6 +24,6 @@ new Vue({
   store,
   template: '<App/>',
   beforeCreate: function() {
-    this.$db.defaults({ posts: [], user: {}, count: 0 }).write()
+    this.$db.defaults({ posts: [], users: [] }).write()
   }
 }).$mount('#app')
