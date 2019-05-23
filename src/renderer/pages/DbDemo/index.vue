@@ -7,6 +7,7 @@
 		user-table(
 			:users="users"
 			:addUser="addUser"
+			:updateUser="updateUser"
 			:deleteUser="deleteUser"
 		)
 </template>
@@ -37,6 +38,16 @@
 		        ...data
 	        })
 	        .write()
+        this.getUsers()
+      },
+      async updateUser(id, data) {
+        await this.$root.$db.read()
+          .get('users')
+          .find({ id })
+          .assign({
+            ...data
+          })
+          .write()
         this.getUsers()
       },
       async deleteUser(id) {
