@@ -55,6 +55,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "fs-extra": "^8.0.1",
+    "json2xls": "^0.1.2",
     "lodash": "^4.17.11",
     "lodash-id": "^0.14.0",
     "lowdb": "^1.0.0",

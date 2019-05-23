@@ -4,6 +4,7 @@
 		div.button-wrapper
 			md-button.md-raised(@click="getUsers") get users
 			md-button.md-raised(@click="cleanUsers") clean users
+			md-button.md-raised(@click="saveToXLS") Export to XLS
 		user-table(
 			:users="users"
 			:addUser="addUser"
@@ -13,7 +14,9 @@
 </template>
 
 <script>
+	import fs from 'fs'
 	import uuidv1 from 'uuid/v1'
+	import json2xls from 'json2xls'
 	import UserTable from '@/pages/DbDemo/components/UserTable'
 
   export default {
@@ -61,6 +64,10 @@
       async cleanUsers() {
         await this.$root.$db.read().set('users', []).write()
 	      this.getUsers()
+			},
+			saveToXLS() {
+				const xls = json2xls(this.users);
+        fs.writeFileSync('data.xlsx', xls, 'binary');
 			}
     },
 	  beforeMount() {
