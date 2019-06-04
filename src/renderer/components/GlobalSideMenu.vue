@@ -7,6 +7,8 @@
 				md-button.global-side-menu-button(@click="goTo('/')") Top
 			md-list-item.global-side-menu-item
 				md-button.global-side-menu-button(@click="goTo('/db-demo')") DB DEMO
+			md-list-item.global-side-menu-item
+				md-button.global-side-menu-button(@click="goTo('/file-diff')") File Diff
 </template>
 
 <script>

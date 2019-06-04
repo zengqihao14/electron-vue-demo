@@ -17,6 +17,12 @@ export default new Router({
       component: () => import('@/pages/DbDemo')
     },
     {
+      path: '/file-diff',
+      icon: 'none',
+      name: 'file-diff',
+      component: () => import('@/pages/FileDiff')
+    },
+    {
       path: '*',
       redirect: '/'
     }
