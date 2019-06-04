@@ -9609,7 +9609,7 @@ xdg-basedir@^3.0.0:
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"
   integrity sha1-SWsswQnsqNus/i3HK2A8F8WHCtQ=
 
-xlsx@:
+xlsx@, xlsx@^0.14.3:
   version "0.14.3"
   resolved "https://registry.yarnpkg.com/xlsx/-/xlsx-0.14.3.tgz#09b7534d95ba8f9aca2c462d0f6603e080202224"
   integrity sha512-wgt9zGKeFp4WIQdPx+j2sNNbDYRbJ+M+uuFcS16pf2yLo/aKcG3RaD4xmS/LHT5rznc6V27NRwIXNWmxLj6eZw==

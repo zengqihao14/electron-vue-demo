@@ -10,7 +10,7 @@
 				span.hint(
 					v-if="!file1 && !isFile1Dropping"
 					ref="hint1"
-				) You can drop image files into this component.
+				) You can drop files into this component.
 				.drop-notice(v-if="!file1 && isFile1Dropping")
 					.drop-bg
 					.drop-hint Drop here
@@ -22,10 +22,11 @@
 				span.hint(
 					v-if="!file2 && !isFile2Dropping"
 					ref="hint2"
-				) You can drop image files into this component.
+				) You can drop files into this component.
 				.drop-notice(v-if="!file2 && isFile2Dropping")
 					.drop-bg
 					.drop-hint Drop here
+		div.spreadsheet-display-contatiner#spreadsheet1
 </template>
 
 <script>
@@ -55,7 +56,6 @@
     methods: {
       bindFileDropping() {
         const fileElLeft = this.$refs.fileInputLeft.$el
-	      console.log('fileElLeft', fileElLeft)
         fileElLeft.addEventListener('drop', this.droppingFile1Handler)
         fileElLeft.addEventListener('dragleave', this.droppingFile1Handler)
         fileElLeft.addEventListener('dragenter', this.droppingFile1Handler)
@@ -151,4 +151,8 @@
 				text-align: center
 				padding: 15px
 				color: #777
+	.spreadsheet-display-contatiner
+		display: block
+		width: 100%
+		margin: 15px 0
 </style>
