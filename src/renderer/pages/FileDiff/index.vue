@@ -1,25 +1,28 @@
 <template lang="pug">
 	.transition-container
 		h1.title File Diff
-		div.input-container(ref="fileInput")
-			md-field.input-field
+		div.input-container
+			md-field.input-field(ref="fileInputLeft")
 				md-file.input-file(
-					:value="filename"
-					@md-change="selectedFiles"
+					:value="filename1"
 					:multiple="isMultiple"
 				)
-				span.hint(ref="hint") You can drop image files into this component.
-				.drop-notice(v-if="isDropping")
+				span.hint(v-if="!file1 && !isFile1Dropping" ref="hint1") You can drop image files into this component.
+				.drop-notice(v-if="isFile1Dropping")
+					.drop-bg
+					.drop-hint Drop here
+			md-field.input-field(ref="fileInputRight")
+				md-file.input-file(
+					:value="filename2"
+					:multiple="isMultiple"
+				)
+				span.hint(v-if="!file2 && !isFile2Dropping"  ref="hint2") You can drop image files into this component.
+				.drop-notice(v-if="isFile2Dropping")
 					.drop-bg
 					.drop-hint Drop here
 </template>
 
 <script>
-  import { ipcRenderer } from 'electron'
-  import fs from 'fs'
-  import uuidv1 from 'uuid/v1'
-  import json2xls from 'json2xls'
-  import J from 'j'
   import { fileListToArray } from '@/utils/index.js'
 
   export default {
@@ -28,40 +31,64 @@
       return {
         isMultiple: false,
         counter: 0,
-        isDropping: false,
-        files: []
+        file1: null,
+        file2: null,
+        isFile1Dropping: false,
+        isFile2Dropping: false
       }
     },
     computed: {
-      filename() {
-        return this.files.map(file => file.name).join(', ')
+      filename1() {
+        return this.file1 ? this.file1.name : ''
+      },
+      filename2() {
+        return this.file2 ? this.file2.name : ''
       }
     },
     components: {},
     methods: {
       bindFileDropping() {
-        const fileEl = this.$refs.fileInput
-        fileEl.addEventListener('drop', this.droppingHandler)
-        fileEl.addEventListener('dragleave', this.droppingHandler)
-        fileEl.addEventListener('dragenter', this.droppingHandler)
-        fileEl.addEventListener('dragover', this.droppingHandler)
+        const fileElLeft = this.$refs.fileInputLeft.$el
+	      console.log('fileElLeft', fileElLeft)
+        fileElLeft.addEventListener('drop', this.droppingFile1Handler)
+        fileElLeft.addEventListener('dragleave', this.droppingFile1Handler)
+        fileElLeft.addEventListener('dragenter', this.droppingFile1Handler)
+        fileElLeft.addEventListener('dragover', this.droppingFile1Handler)
+
+        const fileElRight = this.$refs.fileInputRight.$el
+        fileElRight.addEventListener('drop', this.droppingFile2Handler)
+        fileElRight.addEventListener('dragleave', this.droppingFile2Handler)
+        fileElRight.addEventListener('dragenter', this.droppingFile2Handler)
+        fileElRight.addEventListener('dragover', this.droppingFile2Handler)
       },
-      droppingHandler(event) {
+      droppingFile1Handler(event) {
         event.preventDefault()
         event.stopPropagation()
-        if (event.target === this.$refs.hint) return
+        if (event.target === this.$refs.hint1) return
         if (event.type === 'dragenter') this.counter++
         if (['dragleave', 'drop'].includes(event.type)) this.counter--
-        this.isDropping = this.counter > 0
+        this.isFile1Dropping = this.counter > 0
         if (event.type !== 'drop') return
         if (event.dataTransfer.files.length === 0) return
-        this.files = fileListToArray(event.dataTransfer.files)
-        if (!this.isMultiple) this.files.splice(1)
-	      const file = J.readFile(this.files[0].path)
+        this.file1 = fileListToArray(event.dataTransfer.files)
+        if (!this.isMultiple) {
+          this.file1 = this.file1[0]
+        }
       },
-
-      selectedFiles(files) {
-        this.files = fileListToArray(files)
+      droppingFile2Handler(event) {
+        event.preventDefault()
+        event.stopPropagation()
+        if (event.target === this.$refs.hint2) return
+        if (event.type === 'dragenter') this.counter++
+        if (['dragleave', 'drop'].includes(event.type)) this.counter--
+        this.isFile2Dropping = this.counter > 0
+        if (event.type !== 'drop') return
+        if (event.dataTransfer.files.length === 0) return
+        this.file2 = fileListToArray(event.dataTransfer.files)
+        if (!this.isMultiple) {
+          this.file2 = this.file2[0]
+        }
+        // const file = J.readFile(this.files[0].path)
       }
     },
 	  mounted() {
@@ -79,9 +106,43 @@
 		margin: 12px auto
 		padding: 12px
 		width: 100%
+		display: flex
+		flex-direction: row
+		justify-content: space-between
 		.input-field
-			width: 100%
+			display: block
+			width: calc(50% - 20px)
+			padding: 10px
+			box-sizing: border-box
+			border: 2px dotted rgba(0, 0, 0, .2)
+			border-radius: 10px
+			&::before,
+			&::after
+				display: none
 			.input-file
 				box-sizing: border-box
 				width: 100%
+				i
+					display: none
+				input
+					box-sizing: border-box
+					height: 220px
+					width: 100%
+					margin: 0
+					text-align: center
+					background-color: rgba(0, 0, 0, .03)
+					border-radius: 5px
+					-webkit-text-fill-color: #8B0000 !important
+			.hint,
+			.drop-notice
+				position: absolute
+				box-sizing: border-box
+				top: 50%
+				left: 50%
+				width: 100%
+				height: auto
+				transform: translate(-50%, -50%)
+				text-align: center
+				padding: 15px
+				color: #777
 </style>
