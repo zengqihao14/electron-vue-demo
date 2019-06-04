@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -44,6 +44,23 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+ipcMain.on('open-directory-dialog', (event, p) => {
+  console.log('open-directory-dialog')
+  dialog.showOpenDialog({ properties: [...p] }, (files) => {
+    if (files){
+      event.sender.send('selectedPath', files[0])
+    }
+  })
+})
+ipcMain.on('open-savefile-dialog', (event, options) => {
+  console.log('open-directory-dialog')
+  dialog.showSaveDialog(options, (fullpath) => {
+    if (fullpath){
+      event.sender.send('selectedItem', fullpath)
+    }
+  })
 })
 
 /**

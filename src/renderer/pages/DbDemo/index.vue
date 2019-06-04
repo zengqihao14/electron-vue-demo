@@ -14,6 +14,7 @@
 </template>
 
 <script>
+  import { ipcRenderer } from 'electron'
 	import fs from 'fs'
 	import uuidv1 from 'uuid/v1'
 	import json2xls from 'json2xls'
@@ -65,10 +66,26 @@
         await this.$root.$db.read().set('users', []).write()
 	      this.getUsers()
 			},
-			saveToXLS() {
-				const xls = json2xls(this.users);
-        fs.writeFileSync('export/data.xlsx', xls, 'binary');
-			}
+      saveToXLS() {
+				const xls = json2xls(this.users)
+        ipcRenderer.send('open-directory-dialog', ['openDirectory', 'createDirectory', 'promptToCreate'])
+        ipcRenderer.on('selectedPath', this.handleDirectoryFetched.bind({ fileData: xls }))
+			},
+	    handleDirectoryFetched(e, path, fileData) {
+        if (path === null) {
+          console.log('请选择一个文件/文件夹')
+        } else {
+          ipcRenderer.send('open-savefile-dialog', {
+            defaultPath: path
+          })
+          ipcRenderer.on('selectedItem', this.handleSaveFile.bind({ fileData }))
+        }
+	    },
+	    handleSaveFile(e, fullpath, fileData) {
+		    if (fullpath) {
+          fs.writeFileSync(fullpath, fileData, 'binary')
+		    }
+	    }
     },
 	  beforeMount() {
       this.getUsers()
