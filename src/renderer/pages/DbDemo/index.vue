@@ -67,7 +67,7 @@
 			},
 			saveToXLS() {
 				const xls = json2xls(this.users);
-        fs.writeFileSync('data.xlsx', xls, 'binary');
+        fs.writeFileSync('export/data.xlsx', xls, 'binary');
 			}
     },
 	  beforeMount() {
