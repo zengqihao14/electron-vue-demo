@@ -67,23 +67,22 @@
 	      this.getUsers()
 			},
       saveToXLS() {
-				const xls = json2xls(this.users)
         ipcRenderer.send('open-directory-dialog', ['openDirectory', 'createDirectory', 'promptToCreate'])
-        ipcRenderer.on('selectedPath', this.handleDirectoryFetched.bind({ fileData: xls }))
+        ipcRenderer.on('selectedPath', this.handleDirectoryFetched)
 			},
-	    handleDirectoryFetched(e, path, fileData) {
+	    handleDirectoryFetched(e, path) {
         if (path === null) {
           console.log('请选择一个文件/文件夹')
         } else {
           ipcRenderer.send('open-savefile-dialog', {
             defaultPath: path
           })
-          ipcRenderer.on('selectedItem', this.handleSaveFile.bind({ fileData }))
+          ipcRenderer.on('selectedItem', this.handleSaveFile)
         }
 	    },
-	    handleSaveFile(e, fullpath, fileData) {
+	    handleSaveFile(e, fullpath) {
 		    if (fullpath) {
-          fs.writeFileSync(fullpath, fileData, 'binary')
+          fs.writeFileSync(fullpath, json2xls(this.users), 'binary')
 		    }
 	    }
     },

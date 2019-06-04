@@ -2,9 +2,8 @@
 	.transition-container
 		h1.title File Diff
 		div.input-container(ref="fileInput")
-			label Image
-			md-field
-				md-file(
+			md-field.input-field
+				md-file.input-file(
 					:value="filename"
 					@md-change="selectedFiles"
 					:multiple="isMultiple"
@@ -20,6 +19,7 @@
   import fs from 'fs'
   import uuidv1 from 'uuid/v1'
   import json2xls from 'json2xls'
+  import J from 'j'
   import { fileListToArray } from '@/utils/index.js'
 
   export default {
@@ -41,7 +41,6 @@
     methods: {
       bindFileDropping() {
         const fileEl = this.$refs.fileInput
-	      console.log('fileEl', fileEl)
         fileEl.addEventListener('drop', this.droppingHandler)
         fileEl.addEventListener('dragleave', this.droppingHandler)
         fileEl.addEventListener('dragenter', this.droppingHandler)
@@ -58,10 +57,10 @@
         if (event.dataTransfer.files.length === 0) return
         this.files = fileListToArray(event.dataTransfer.files)
         if (!this.isMultiple) this.files.splice(1)
+	      const file = J.readFile(this.files[0].path)
       },
 
       selectedFiles(files) {
-        console.log('files', files)
         this.files = fileListToArray(files)
       }
     },
@@ -75,7 +74,14 @@
 	.title
 		font-size: 20px
 		font-weight: bold
-		.button-wrapper
-			display: inline-flex
-			margin: 15px 0 0
+	.input-container
+		box-sizing: border-box
+		margin: 12px auto
+		padding: 12px
+		width: 100%
+		.input-field
+			width: 100%
+			.input-file
+				box-sizing: border-box
+				width: 100%
 </style>
