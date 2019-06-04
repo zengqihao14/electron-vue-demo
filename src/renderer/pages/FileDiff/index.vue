@@ -7,8 +7,11 @@
 					:value="filename1"
 					:multiple="isMultiple"
 				)
-				span.hint(v-if="!file1 && !isFile1Dropping" ref="hint1") You can drop image files into this component.
-				.drop-notice(v-if="isFile1Dropping")
+				span.hint(
+					v-if="!file1 && !isFile1Dropping"
+					ref="hint1"
+				) You can drop image files into this component.
+				.drop-notice(v-if="!file1 && isFile1Dropping")
 					.drop-bg
 					.drop-hint Drop here
 			md-field.input-field(ref="fileInputRight")
@@ -16,8 +19,11 @@
 					:value="filename2"
 					:multiple="isMultiple"
 				)
-				span.hint(v-if="!file2 && !isFile2Dropping"  ref="hint2") You can drop image files into this component.
-				.drop-notice(v-if="isFile2Dropping")
+				span.hint(
+					v-if="!file2 && !isFile2Dropping"
+					ref="hint2"
+				) You can drop image files into this component.
+				.drop-notice(v-if="!file2 && isFile2Dropping")
 					.drop-bg
 					.drop-hint Drop here
 </template>
@@ -111,7 +117,7 @@
 		justify-content: space-between
 		.input-field
 			display: block
-			width: calc(50% - 20px)
+			width: calc(50% - 50px)
 			padding: 10px
 			box-sizing: border-box
 			border: 2px dotted rgba(0, 0, 0, .2)
