@@ -49,7 +49,7 @@ app.on('activate', () => {
 ipcMain.on('open-directory-dialog', (event, p) => {
   console.log('open-directory-dialog')
   dialog.showOpenDialog({ properties: [...p] }, (files) => {
-    if (files){
+    if (files) {
       event.sender.send('selectedPath', files[0])
     }
   })
@@ -57,7 +57,7 @@ ipcMain.on('open-directory-dialog', (event, p) => {
 ipcMain.on('open-savefile-dialog', (event, options) => {
   console.log('open-directory-dialog')
   dialog.showSaveDialog(options, (fullpath) => {
-    if (fullpath){
+    if (fullpath) {
       event.sender.send('selectedItem', fullpath)
     }
   })
