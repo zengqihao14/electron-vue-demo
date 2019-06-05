@@ -61,6 +61,7 @@
     "lodash": "^4.17.11",
     "lodash-id": "^0.14.0",
     "lowdb": "^1.0.0",
+    "pptxgenjs": "^2.5.0",
     "uuid": "^3.3.2",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
