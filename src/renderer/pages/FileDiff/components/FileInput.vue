@@ -72,13 +72,11 @@
             this.setFile(files, xlsx)
 	        } else {
             this.initInput()
-            this.unsetFile()
             console.log('not allowed')
 	        }
         } catch (e) {
+          console.log(e)
           this.initInput()
-          this.unsetFile()
-	        console.log(e)
         }
       },
       handleOnChange(FileList) {
@@ -94,20 +92,20 @@
             } else {
               console.log('not allowed')
               this.initInput()
-              this.unsetFile()
             }
           } catch (e) {
-            this.initInput()
-            this.unsetFile()
             console.log(e)
+            this.initInput()
           }
         }
       },
 	    initInput() {
         const fileInputFormEl = this.$refs.fileInputForm
-        console.log('fileInputFormEl', fileInputFormEl)
+        this.unsetFile()
 		    if (fileInputFormEl) {
-          fileInputFormEl.reset()
+		      setTimeout(() => {
+            fileInputFormEl.reset()
+		      }, 0)
 		    }
 	    }
     },
