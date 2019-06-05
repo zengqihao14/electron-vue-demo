@@ -31,6 +31,8 @@
         if (this.xlsx) {
           try {
             this.htmlXLSX = XLSX.utils.sheet_to_html(this.xlsx.Sheets[this.xlsx.SheetNames[0]], { editable: true })
+            // const jsonXLSX = XLSX.utils.sheet_to_json(this.xlsx.Sheets[this.xlsx.SheetNames[0]], {header: 'A'})
+	          // console.log('jsonXLSX', jsonXLSX)
           } catch (e) {
             console.log(e)
           }
