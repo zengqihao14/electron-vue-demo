@@ -2,43 +2,22 @@
 	.transition-container
 		h1.title File Diff
 		div.input-container
-			md-field.input-field(
-				ref="fileInputLeft"
-				:class="file1 ? 'hasImported' : ''"
+			file-input(
+				:file="file1"
+				:setFile="setFile1"
+				:unsetFile="unsetFile1"
 			)
-				md-file.input-file(
-					:value="filename1"
-					:multiple="isMultiple"
-				)
-				span.hint(
-					v-if="!file1 && !isFile1Dropping"
-					ref="hint1"
-				) You can drop files into this component.
-				.drop-notice(v-if="!file1 && isFile1Dropping")
-					.drop-bg
-					.drop-hint Drop here
-			.spreadsheet-area
-
 			span.breakline
-			md-field.input-field(
-				ref="fileInputRight"
-				:class="file2 ? 'hasImported' : ''"
+			file-input(
+				:file="file2"
+				:setFile="setFile2"
+				:unsetFile="unsetFile2"
 			)
-				md-file.input-file(
-					:value="filename2"
-					:multiple="isMultiple"
-				)
-				span.hint(
-					v-if="!file2 && !isFile2Dropping"
-					ref="hint2"
-				) You can drop files into this component.
-				.drop-notice(v-if="!file2 && isFile2Dropping")
-					.drop-bg
-					.drop-hint Drop here
 		div.spreadsheet-display-contatiner#spreadsheet1
 </template>
 
 <script>
+  import FileInput from '@/pages/FileDiff/components/FileInput'
   import { fileListToArray } from '@/utils/index.js'
 
   export default {
@@ -53,62 +32,24 @@
         isFile2Dropping: false
       }
     },
-    computed: {
-      filename1() {
-        return this.file1 ? this.file1.name : ''
-      },
-      filename2() {
-        return this.file2 ? this.file2.name : ''
-      }
+    components: {
+      FileInput
     },
-    components: {},
     methods: {
-      bindFileDropping() {
-        const fileElLeft = this.$refs.fileInputLeft.$el
-        fileElLeft.addEventListener('drop', this.droppingFile1Handler)
-        fileElLeft.addEventListener('dragleave', this.droppingFile1Handler)
-        fileElLeft.addEventListener('dragenter', this.droppingFile1Handler)
-        fileElLeft.addEventListener('dragover', this.droppingFile1Handler)
-
-        const fileElRight = this.$refs.fileInputRight.$el
-        fileElRight.addEventListener('drop', this.droppingFile2Handler)
-        fileElRight.addEventListener('dragleave', this.droppingFile2Handler)
-        fileElRight.addEventListener('dragenter', this.droppingFile2Handler)
-        fileElRight.addEventListener('dragover', this.droppingFile2Handler)
+	    setFile1(FileList) {
+        this.file1 = FileList
+	    },
+      setFile2(FileList) {
+        this.file2 = FileList
       },
-      droppingFile1Handler(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        if (event.target === this.$refs.hint1) return
-        if (event.type === 'dragenter') this.counter++
-        if (['dragleave', 'drop'].includes(event.type)) this.counter--
-        this.isFile1Dropping = this.counter > 0
-        if (event.type !== 'drop') return
-        if (event.dataTransfer.files.length === 0) return
-        this.file1 = fileListToArray(event.dataTransfer.files)
-        if (!this.isMultiple) {
-          this.file1 = this.file1[0]
-        }
+      unsetFile1() {
+        this.file1 = null
       },
-      droppingFile2Handler(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        if (event.target === this.$refs.hint2) return
-        if (event.type === 'dragenter') this.counter++
-        if (['dragleave', 'drop'].includes(event.type)) this.counter--
-        this.isFile2Dropping = this.counter > 0
-        if (event.type !== 'drop') return
-        if (event.dataTransfer.files.length === 0) return
-        this.file2 = fileListToArray(event.dataTransfer.files)
-        if (!this.isMultiple) {
-          this.file2 = this.file2[0]
-        }
-        // const file = J.readFile(this.files[0].path)
-      }
+      unsetFile2() {
+        this.file1 = null
+      },
     },
-	  mounted() {
-      this.bindFileDropping()
-    }
+	  mounted() {}
   }
 </script>
 
@@ -124,75 +65,6 @@
 		display: flex
 		flex-direction: column
 		justify-content: flex-start
-		.input-field
-			display: block
-			width: 100%
-			height: calc((100vh - 64px - 40px - 32px - 20px - 20px) / 2)
-			min-height: 320px
-			padding: 10px
-			box-sizing: border-box
-			border: 2px dotted rgba(0, 0, 0, .2)
-			border-radius: 8px
-			margin: 0
-			overflow: scroll
-			transition: all .58s ease
-			&::before,
-			&::after
-				display: none
-			.input-file
-				box-sizing: border-box
-				width: 100%
-				overflow: hidden
-				i
-					display: none
-				input.md-input
-					box-sizing: border-box
-					height: calc((100vh - 64px - 40px - 32px - 20px - 20px - 50px) / 2)
-					min-height: 300px
-					width: 100%
-					padding: 0
-					margin: 0
-					text-align: center
-					background-color: rgba(0, 0, 0, .03)
-					border-radius: 5px
-					-webkit-text-fill-color: #8B0000 !important
-					transition: all .58s ease
-				input
-					width: auto
-			.hint,
-			.drop-notice
-				position: absolute
-				box-sizing: border-box
-				top: 50%
-				left: 50%
-				width: auto
-				height: auto
-				transform: translate(-50%, -50%)
-				text-align: center
-				padding: 15px
-				color: #777
-				transition: all .58s ease
-		.input-field.hasImported
-			width: 180px
-			height: 30px
-			min-height: auto
-			padding: 5px
-			border-radius: 5px
-			input.md-input
-				height: 16px
-				min-height: auto
-				border-radius: 3px
-				font-size: 11px
-			input
-				font-size: 11px
-			.hint,
-			.drop-notice
-				height: 20px
-				font-size: 11px
-				padding: 0
-				text-wrap: none
-				overflow-wrap: unset
-				overflow: hidden
 	.spreadsheet-display-contatiner
 		display: block
 		width: 100%
