@@ -13,7 +13,8 @@
 				:file="file1"
 				:xlsx="file1xlsx"
 			)
-			span.breakline
+			.breakline
+				md-button.md-raised.diff-btn(@click="doDiff") Diff
 			file-input(
 				:file="file2"
 				:xlsx="file2xlsx"
@@ -29,6 +30,8 @@
 </template>
 
 <script>
+  import XLSX from 'xlsx'
+  import { diffJson, diffArrays } from 'diff'
   import FileInput from '@/pages/FileDiff/components/FileInput'
   import SpreadSheet from '@/pages/FileDiff/components/SpreadSheet'
 
@@ -71,6 +74,20 @@
         this.file2 = null
         this.file2xlsx = null
       },
+      doDiff() {
+				if (this.file1xlsx && this.file2xlsx) {
+				  try {
+            const file1Json = XLSX.utils.sheet_to_json(this.file1xlsx.Sheets[this.file1xlsx.SheetNames[0]], {header: 'A'})
+            const file2Json = XLSX.utils.sheet_to_json(this.file2xlsx.Sheets[this.file2xlsx.SheetNames[0]], {header: 'A'})
+            file1Json.forEach((row, idx) => {
+              const diff = diffJson(row, file2Json[idx])
+              console.log('diff', diff)
+            })
+				  } catch (e) {
+					  console.log(e)
+          }
+				}
+      }
     },
 	  mounted() {}
   }
@@ -97,4 +114,13 @@
 		width: 100%
 		background-color: rgba(0, 0, 0, .5)
 		margin: 18px 0 19px
+		.diff-btn
+			position: absolute
+			top: 50%
+			left: 50%
+			transform: translate(-50%, -50%)
+			height: 25px
+			z-index: 10
+			.md-button-content
+				font-size: 12px
 </style>
