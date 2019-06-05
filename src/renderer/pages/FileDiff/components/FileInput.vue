@@ -68,7 +68,7 @@
         }
         try {
           const xlsx = XLSX.readFile(files.path)
-	        if (xlsx.Workbook) {
+	        if (xlsx) {
             this.setFile(files, xlsx)
 	        } else {
             this.initInput()
@@ -87,7 +87,7 @@
           }
           try {
             const xlsx = XLSX.readFile(files.path)
-            if (xlsx.Workbook) {
+            if (xlsx) {
               this.setFile(files, xlsx)
             } else {
               console.log('not allowed')

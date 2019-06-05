@@ -53,6 +53,7 @@
 			min-width: 1280px
 			table
 				position: relative
+				width: 100%
 				tbody
 					position: relative
 					width: auto

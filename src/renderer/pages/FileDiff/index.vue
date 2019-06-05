@@ -1,6 +1,6 @@
 <template lang="pug">
 	.transition-container
-		h1.title File Diff
+		h1.title SpreadSheet
 		div.input-container
 			file-input(
 				:file="file1"
