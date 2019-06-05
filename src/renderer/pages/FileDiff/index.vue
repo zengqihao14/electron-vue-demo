@@ -14,6 +14,7 @@
 				.drop-notice(v-if="!file1 && isFile1Dropping")
 					.drop-bg
 					.drop-hint Drop here
+			span.breakline
 			md-field.input-field(ref="fileInputRight")
 				md-file.input-file(
 					:value="filename2"
@@ -109,43 +110,52 @@
 		font-weight: bold
 	.input-container
 		box-sizing: border-box
-		margin: 12px auto
-		padding: 12px
+		margin: 10px auto 0
+		padding: 10px
 		width: 100%
 		display: flex
-		flex-direction: row
-		justify-content: space-between
+		flex-direction: column
+		justify-content: flex-start
 		.input-field
 			display: block
-			width: calc(50% - 50px)
+			width: 100%
+			height: calc((100vh - 64px - 40px - 32px - 20px - 20px) / 2)
+			min-height: 320px
 			padding: 10px
 			box-sizing: border-box
 			border: 2px dotted rgba(0, 0, 0, .2)
 			border-radius: 10px
+			margin: 0
+			overflow: scroll
 			&::before,
 			&::after
 				display: none
 			.input-file
 				box-sizing: border-box
 				width: 100%
+				overflow: hidden
 				i
 					display: none
-				input
+				input.md-input
 					box-sizing: border-box
-					height: 220px
+					height: calc((100vh - 64px - 40px - 32px - 20px - 20px - 50px) / 2)
+					min-height: 300px
 					width: 100%
+					padding: 0
 					margin: 0
 					text-align: center
 					background-color: rgba(0, 0, 0, .03)
 					border-radius: 5px
 					-webkit-text-fill-color: #8B0000 !important
+				input
+					width: auto
 			.hint,
 			.drop-notice
 				position: absolute
 				box-sizing: border-box
 				top: 50%
 				left: 50%
-				width: 100%
+				width: auto
 				height: auto
 				transform: translate(-50%, -50%)
 				text-align: center
@@ -155,4 +165,9 @@
 		display: block
 		width: 100%
 		margin: 15px 0
+	.breakline
+		height: 1px
+		width: 100%
+		background-color: rgba(0, 0, 0, .5)
+		margin: 18px 0 19px
 </style>
