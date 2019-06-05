@@ -2,7 +2,10 @@
 	.transition-container
 		h1.title File Diff
 		div.input-container
-			md-field.input-field(ref="fileInputLeft")
+			md-field.input-field(
+				ref="fileInputLeft"
+				:class="file1 ? 'hasImported' : ''"
+			)
 				md-file.input-file(
 					:value="filename1"
 					:multiple="isMultiple"
@@ -14,8 +17,13 @@
 				.drop-notice(v-if="!file1 && isFile1Dropping")
 					.drop-bg
 					.drop-hint Drop here
+			.spreadsheet-area
+
 			span.breakline
-			md-field.input-field(ref="fileInputRight")
+			md-field.input-field(
+				ref="fileInputRight"
+				:class="file2 ? 'hasImported' : ''"
+			)
 				md-file.input-file(
 					:value="filename2"
 					:multiple="isMultiple"
@@ -124,9 +132,10 @@
 			padding: 10px
 			box-sizing: border-box
 			border: 2px dotted rgba(0, 0, 0, .2)
-			border-radius: 10px
+			border-radius: 8px
 			margin: 0
 			overflow: scroll
+			transition: all .58s ease
 			&::before,
 			&::after
 				display: none
@@ -147,6 +156,7 @@
 					background-color: rgba(0, 0, 0, .03)
 					border-radius: 5px
 					-webkit-text-fill-color: #8B0000 !important
+					transition: all .58s ease
 				input
 					width: auto
 			.hint,
@@ -161,6 +171,28 @@
 				text-align: center
 				padding: 15px
 				color: #777
+				transition: all .58s ease
+		.input-field.hasImported
+			width: 180px
+			height: 30px
+			min-height: auto
+			padding: 5px
+			border-radius: 5px
+			input.md-input
+				height: 16px
+				min-height: auto
+				border-radius: 3px
+				font-size: 11px
+			input
+				font-size: 11px
+			.hint,
+			.drop-notice
+				height: 20px
+				font-size: 11px
+				padding: 0
+				text-wrap: none
+				overflow-wrap: unset
+				overflow: hidden
 	.spreadsheet-display-contatiner
 		display: block
 		width: 100%
