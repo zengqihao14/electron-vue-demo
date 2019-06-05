@@ -8,6 +8,11 @@
 				:setFile="setFile1"
 				:unsetFile="unsetFile1"
 			)
+			spread-sheet(
+				v-if="file1xlsx"
+				:file="file1"
+				:xlsx="file1xlsx"
+			)
 			span.breakline
 			file-input(
 				:file="file2"
@@ -15,11 +20,17 @@
 				:setFile="setFile2"
 				:unsetFile="unsetFile2"
 			)
+			spread-sheet(
+				v-if="file2xlsx"
+				:file="file2"
+				:xlsx="file2xlsx"
+			)
 		div.spreadsheet-display-contatiner#spreadsheet1
 </template>
 
 <script>
   import FileInput from '@/pages/FileDiff/components/FileInput'
+  import SpreadSheet from '@/pages/FileDiff/components/SpreadSheet'
 
   export default {
     name: 'file-diff',
@@ -36,21 +47,20 @@
       }
     },
     components: {
-      FileInput
+      FileInput,
+      SpreadSheet
     },
     methods: {
 	    setFile1(FileList, xlsx) {
 		    if (FileList && xlsx) {
           this.file1 = FileList
           this.file1xlsx = xlsx
-			    console.log('file1xlsx', xlsx)
 		    }
 	    },
       setFile2(FileList, xlsx) {
         if (FileList && xlsx) {
           this.file2 = FileList
           this.file2xlsx = xlsx
-          console.log('file2xlsx', xlsx)
         }
       },
       unsetFile1() {
