@@ -6,15 +6,9 @@
 		md-file.input-file(
 			:value="filename"
 			:multiple="isMultiple"
+			:placeholder="!isFileDropping ? 'You can drop files into this component.' : 'Drop here'"
 			@md-change="handleOnChange"
 		)
-		span.hint(
-			v-if="!file && !isFileDropping"
-			ref="hint"
-		) You can drop files into this component.
-		.drop-notice(v-if="!file && isFileDropping")
-			.drop-bg
-			.drop-hint Drop here
 		button.cancel-button(
 			v-if="file"
 			@click="unsetFile"
@@ -59,7 +53,6 @@
       droppingFileHandler(event) {
         event.preventDefault()
         event.stopPropagation()
-        if (event.target === this.$refs.hint) return
         if (event.type === 'dragenter') this.counter++
         if (['dragleave', 'drop'].includes(event.type)) this.counter--
         this.isFileDropping = this.counter > 0
@@ -73,11 +66,13 @@
         // const file = J.readFile(this.files[0].path)
       },
       handleOnChange(FileList) {
-        let files = FileList
-        if (!this.isMultiple) {
-          files = files[0]
+        if (FileList.length) {
+          let files = FileList
+          if (!this.isMultiple) {
+            files = files[0]
+          }
+          this.setFile(files)
         }
-        this.setFile(files)
       },
     },
     mounted() {
@@ -99,7 +94,7 @@
 		margin: 0
 		overflow: scroll
 		cursor: pointer
-		transition: all .58s ease
+		transition: width .58s ease, height .38s ease
 		&::before,
 		&::after
 			display: none
@@ -109,6 +104,9 @@
 			overflow: hidden
 			i
 				display: none
+			input
+				cursor: pointer
+				width: auto
 			input.md-input
 				box-sizing: border-box
 				height: calc((100vh - 64px - 40px - 32px - 20px - 20px - 50px) / 2)
@@ -119,25 +117,8 @@
 				text-align: center
 				background-color: rgba(0, 0, 0, .03)
 				border-radius: 5px
-				-webkit-text-fill-color: #8B0000 !important
-				transition: all .58s ease
-			input
-				cursor: pointer
-				width: auto
-		.hint,
-		.drop-notice
-			cursor: pointer
-			position: absolute
-			box-sizing: border-box
-			top: 50%
-			left: 50%
-			width: auto
-			height: auto
-			transform: translate(-50%, -50%)
-			text-align: center
-			padding: 15px
-			color: #777
-			transition: all .58s ease
+				text-overflow: ellipsis
+				transition: width .58s ease, height .38s ease
 	.input-field.hasImported
 		width: 180px
 		height: 30px
@@ -149,16 +130,15 @@
 			min-height: auto
 			border-radius: 3px
 			font-size: 11px
+			font-weight: bold
+			text-overflow: ellipsis
+			text-align: left
+			padding: 0 5px
 		input
 			font-size: 11px
-		.hint,
-		.drop-notice
-			height: 20px
-			font-size: 11px
-			padding: 0
-			text-wrap: none
-			overflow-wrap: unset
-			overflow: hidden
+			font-weight: bold
+			text-overflow: ellipsis
+			text-align: left
 	.cancel-button
 		cursor: pointer
 		position: absolute

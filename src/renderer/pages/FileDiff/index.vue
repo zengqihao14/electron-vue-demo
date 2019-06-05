@@ -46,7 +46,7 @@
         this.file1 = null
       },
       unsetFile2() {
-        this.file1 = null
+        this.file2 = null
       },
     },
 	  mounted() {}
