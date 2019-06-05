@@ -4,12 +4,14 @@
 		div.input-container
 			file-input(
 				:file="file1"
+				:xlsx="file1xlsx"
 				:setFile="setFile1"
 				:unsetFile="unsetFile1"
 			)
 			span.breakline
 			file-input(
 				:file="file2"
+				:xlsx="file2xlsx"
 				:setFile="setFile2"
 				:unsetFile="unsetFile2"
 			)
@@ -18,7 +20,6 @@
 
 <script>
   import FileInput from '@/pages/FileDiff/components/FileInput'
-  import { fileListToArray } from '@/utils/index.js'
 
   export default {
     name: 'file-diff',
@@ -28,6 +29,8 @@
         counter: 0,
         file1: null,
         file2: null,
+        file1xlsx: null,
+        file2xlsx: null,
         isFile1Dropping: false,
         isFile2Dropping: false
       }
@@ -36,17 +39,27 @@
       FileInput
     },
     methods: {
-	    setFile1(FileList) {
-        this.file1 = FileList
+	    setFile1(FileList, xlsx) {
+		    if (FileList && xlsx) {
+          this.file1 = FileList
+          this.file1xlsx = xlsx
+			    console.log('file1xlsx', xlsx)
+		    }
 	    },
-      setFile2(FileList) {
-        this.file2 = FileList
+      setFile2(FileList, xlsx) {
+        if (FileList && xlsx) {
+          this.file2 = FileList
+          this.file2xlsx = xlsx
+          console.log('file2xlsx', xlsx)
+        }
       },
       unsetFile1() {
         this.file1 = null
+        this.file1xlsx = null
       },
       unsetFile2() {
         this.file2 = null
+        this.file2xlsx = null
       },
     },
 	  mounted() {}

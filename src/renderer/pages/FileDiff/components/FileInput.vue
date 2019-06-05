@@ -1,22 +1,24 @@
 <template lang="pug">
 	md-field.input-field(
-		ref="fileInput"
+		ref="fileInputField"
 		:class="file ? 'hasImported' : ''"
 	)
-		md-file.input-file(
-			:value="filename"
-			:multiple="isMultiple"
-			:placeholder="!isFileDropping ? 'You can drop files into this component.' : 'Drop here'"
-			@md-change="handleOnChange"
-		)
-		button.cancel-button(
-			v-if="file"
-			@click="unsetFile"
-		)
-			cancel-icon.cancel-icon
+		form(ref="fileInputForm")
+			md-file.input-file(
+				:value="filename"
+				:multiple="isMultiple"
+				:placeholder="!isFileDropping ? 'You can drop files into this component.' : 'Drop here'"
+				@md-change="handleOnChange"
+			)
+			button.cancel-button(
+				v-if="file"
+				@click="unsetFile"
+			)
+				cancel-icon.cancel-icon
 </template>
 
 <script>
+  import XLSX from 'xlsx'
   import CancelIcon from 'vue-material-design-icons/Cancel.vue'
   import { fileListToArray } from '@/utils/index.js'
 
@@ -31,6 +33,7 @@
     },
 	  props: {
       file: null,
+      xlsx: null,
       setFile: Function,
       unsetFile: Function
 	  },
@@ -44,15 +47,16 @@
     },
     methods: {
       bindFileDropping() {
-        const fileEl = this.$refs.fileInput.$el
-        fileEl.addEventListener('drop', this.droppingFileHandler)
-        fileEl.addEventListener('dragleave', this.droppingFileHandler)
-        fileEl.addEventListener('dragenter', this.droppingFileHandler)
-        fileEl.addEventListener('dragover', this.droppingFileHandler)
+        const fileFieldEl = this.$refs.fileInputField.$el
+        fileFieldEl.addEventListener('drop', this.droppingFileHandler)
+        fileFieldEl.addEventListener('dragleave', this.droppingFileHandler)
+        fileFieldEl.addEventListener('dragenter', this.droppingFileHandler)
+        fileFieldEl.addEventListener('dragover', this.droppingFileHandler)
       },
       droppingFileHandler(event) {
         event.preventDefault()
         event.stopPropagation()
+
         if (event.type === 'dragenter') this.counter++
         if (['dragleave', 'drop'].includes(event.type)) this.counter--
         this.isFileDropping = this.counter > 0
@@ -62,8 +66,20 @@
         if (!this.isMultiple) {
           files = files[0]
         }
-        this.setFile(files)
-        // const file = J.readFile(this.files[0].path)
+        try {
+          const xlsx = XLSX.readFile(files.path)
+	        if (xlsx.Workbook) {
+            this.setFile(files, xlsx)
+	        } else {
+            this.initInput()
+            this.unsetFile()
+            console.log('not allowed')
+	        }
+        } catch (e) {
+          this.initInput()
+          this.unsetFile()
+	        console.log(e)
+        }
       },
       handleOnChange(FileList) {
         if (FileList.length) {
@@ -71,9 +87,29 @@
           if (!this.isMultiple) {
             files = files[0]
           }
-          this.setFile(files)
+          try {
+            const xlsx = XLSX.readFile(files.path)
+            if (xlsx.Workbook) {
+              this.setFile(files, xlsx)
+            } else {
+              console.log('not allowed')
+              this.initInput()
+              this.unsetFile()
+            }
+          } catch (e) {
+            this.initInput()
+            this.unsetFile()
+            console.log(e)
+          }
         }
       },
+	    initInput() {
+        const fileInputFormEl = this.$refs.fileInputForm
+        console.log('fileInputFormEl', fileInputFormEl)
+		    if (fileInputFormEl) {
+          fileInputFormEl.reset()
+		    }
+	    }
     },
     mounted() {
       this.bindFileDropping()
@@ -92,7 +128,7 @@
 		border: 2px dotted rgba(0, 0, 0, .2)
 		border-radius: 8px
 		margin: 0
-		overflow: scroll
+		overflow: hidden
 		cursor: pointer
 		transition: width .58s ease, height .38s ease
 		&::before,
@@ -107,6 +143,11 @@
 			input
 				cursor: pointer
 				width: auto
+				overflow: hidden
+				text-overflow: ellipsis
+				height: calc((100vh - 64px - 40px - 32px - 20px - 20px - 50px) / 2)
+				min-height: 300px
+				background-color: transparent
 			input.md-input
 				box-sizing: border-box
 				height: calc((100vh - 64px - 40px - 32px - 20px - 20px - 50px) / 2)
